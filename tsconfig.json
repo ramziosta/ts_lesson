@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2020", // Adjust target based on your needs
+    "module": "commonjs",
+    "lib": ["dom", "dom.iterable", "esnext"], // Include necessary libraries
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist", // Specify output directory
+    "sourceMap": true // Enable source maps
+  }
+}
