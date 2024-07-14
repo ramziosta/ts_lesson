@@ -1,5 +1,3 @@
-
-
 let pizzaMenu: {name:string, price?: number, ingredients?: string[]}[] = [
     {
         name: 'Margherita',
@@ -28,10 +26,15 @@ type Pizza = {
     price?: number;
     ingredients?: string[];
 };
+type order = {
+    orderedPizza: Pizza;
+    status: string;
+    id: number;
+};
 
 let cashInRegister: number = 100;
 let totalSales: number = 0; // Track total sales
-const orderQue: Pizza[] = [];
+const orderQue: order[] = [];
 
 const addNewPizza = (name: string, price: number, ingredients?: string[]) => {
     pizzaMenu.push({
@@ -53,10 +56,38 @@ const placeOrder = (pizzaName: string): Pizza | undefined => {
         console.log(`Sorry, we don't have ${pizzaName}`);
         return undefined;
     }
-
-    orderQue.push(orderedPizza);
+    let orderId: number = orderQue.length+1;
+    const newOrder: order = { orderedPizza, status: 'ordered', id: orderId };
+    orderQue.push(newOrder);
     cashInRegister += orderedPizza.price ?? 0;
     totalSales += orderedPizza.price ?? 0; // Add price to total sales
 
     return orderedPizza;
 };
+
+const completeOrder = (orderId:number): order | undefined=> {
+    let completedPizza: order | undefined = orderQue.find(order => orderId === order.id);
+    if(!completedPizza) {
+        console.log('Order not found');
+        return;
+    }
+    completedPizza.status = 'completed';
+    return completedPizza;
+}
+
+
+addNewPizza("Jalapeno Jack", 14, ["tomato, jalapeno, cheese"]);
+addNewPizza("Pepperoni Feast", 12, ["tomato, mozzarella, pepperoni"]);
+console.log(pizzaMenu.length);
+
+placeOrder("Jalapeno Jack");
+placeOrder("Pepperoni Feast");
+placeOrder("Hawaiian");
+
+const completedOrder = completeOrder(3); // Store the returned pizza
+if (completedOrder) {
+    console.log(` Order number ${completedOrder.id} has been ${completedOrder.status}`);
+} else {
+    console.log("Order not found");
+}
+
